@@ -1,9 +1,26 @@
-export const signupValidator = (
-  name: string,
-  email: string,
-  password: string,
-  confirmPassword: string
-) => {
+/**
+ * @param {string} name - required, min 3 characters
+ * @param {string} email - required, valid email format
+ * @param {string} password - required, min 6 characters, must match confirmPassword
+ * @param {string} confirmPassword - required, must match password
+ * @returns {object} errors { email: "", password: "", name: ""}
+ */
+
+export const userValidator = ({
+  name,
+  email,
+  password,
+  confirmPassword,
+}: {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}): {
+  email: string;
+  password: string;
+  name: string;
+} => {
   const errors = {
     email: "",
     password: "",
