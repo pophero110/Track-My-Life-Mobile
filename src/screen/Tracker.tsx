@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
 import { StyleConstants } from "../StyleConstants";
-import { writeNdef } from "../services/nfcManager";
+import { writeNdef } from "../utils/nfcManager";
 import TimerButton from "../components/TimerButton";
 import Quote from "../components/Quote";
 import { useEffect, useState } from "react";

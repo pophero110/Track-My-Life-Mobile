@@ -8,28 +8,28 @@ import {
 import { StyleConstants } from "../StyleConstants";
 import { useState } from "react";
 import { signup } from "../api/users";
-import { signupValidator } from "../services/userValidator";
+import { userValidator } from "../utils/userValidator";
 
 export default function Signup({ navigation }) {
   const [name, onChangeName] = useState("");
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
   const [confirmPassword, onChangeConfirmPassword] = useState("");
-  const [errors, setErrors] = useState({ email: "", name: "", password: "" });
+  const [errors, setErrors] = useState([]);
   const [response, setResponse] = useState("");
   const onSignup = async () => {
-    const validateErrors = signupValidator(
+    const validateErrors = userValidator({
       name,
       email,
       password,
-      confirmPassword
-    );
+      confirmPassword,
+    });
     if (
       validateErrors.email ||
       validateErrors.name ||
       validateErrors.password
     ) {
-      setErrors(validateErrors);
+      setErrors(Object.values(validateErrors));
     } else {
       const response = await signup(email, password, name);
       if (response.status === 201) {
@@ -84,10 +84,19 @@ export default function Signup({ navigation }) {
         placeholder="Confirm Password"
       />
 
-      <Text style={{ color: "green", marginBottom: 8 }}>{response}</Text>
-      <Text style={{ color: "red" }}>{errors.name}</Text>
-      <Text style={{ color: "red" }}>{errors.email}</Text>
-      <Text style={{ color: "red", marginBottom: 8 }}>{errors.password}</Text>
+      {response && (
+        <Text
+          style={{
+            color: "green",
+            marginBottom: 8,
+          }}
+        >
+          {response}
+        </Text>
+      )}
+      {errors.map((error) => (
+        <Text style={{ color: "red", marginBottom: 8 }}>{error}</Text>
+      ))}
       <TouchableHighlight onPress={onSignup} style={styles.button}>
         <Text style={{ color: "white", fontWeight: "bold" }}>Create</Text>
       </TouchableHighlight>
