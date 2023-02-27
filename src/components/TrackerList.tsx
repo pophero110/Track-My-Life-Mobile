@@ -1,51 +1,31 @@
-import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
-import { StyleConstants } from "../StyleConstants";
+import { useEffect } from "react";
+import { View, StyleSheet } from "react-native";
 import { getTrackers } from "../api/trackers";
-export default function TrackerList() {
-  const [trackers, setTrackers] = useState([]);
-  // get trackers from api
-  // set trackers to state
-  // render trackers
+import Tracker from "./Tracker";
+
+export default function TrackerList({ setTrackers, trackers, navigation }) {
   useEffect(() => {
     const fetchTracker = async () => {
       const result = await getTrackers();
-      console.log(result);
+      if (!result.data.error) {
+        setTrackers(result.data);
+      }
     };
     fetchTracker();
   }, []);
   return (
-    <View>
-      <Text>TrackerList</Text>
-      <Button
-        onPress={async () => {
-          getTrackers().then((result) => {
-            console.log(result);
-          });
-        }}
-        title="view"
-      ></Button>
+    <View style={styles.trackerList}>
+      {trackers.map((tracker) => (
+        <Tracker
+          key={tracker._id.toString()}
+          navigation={navigation}
+          tracker={tracker}
+        ></Tracker>
+      ))}
     </View>
   );
 }
 
-const Tracker = ({ tracker }) => {
-  return (
-    <View style={styles.tracker}>
-      <Text style={styles.trackerName}>{tracker.name}</Text>
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
-  tracker: {
-    backgroundColor: "white",
-    padding: 8,
-    width: "100%",
-    borderRadius: StyleConstants.borderRadius,
-    height: 42,
-  },
-  trackerName: {
-    fontSize: 16,
-  },
+  trackerList: {},
 });

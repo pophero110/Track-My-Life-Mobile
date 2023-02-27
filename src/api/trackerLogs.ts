@@ -2,20 +2,23 @@ import { apiClient } from "./client";
 import { getSessionToken } from "./client";
 
 const BASE_PATH = "/api/v1/trackers";
-
 /**
- * Get all trackers for a user
- * @header {Authorization} Bearer sessionToken
+ * Create a new tracker log
+ * @header {Authorization} Bearer sessionToken - The session token of the user
+ * @param {string} trackerId - The id of the tracker
+ * @param {string} value - The value of the tracker log
  * if successful, the return will be:
- * @returns {object} - { data: { trackers: { id: string, name: string, description: string, userId: string, createdAt: string, updatedAt: string }[] } }
+ * @return {object} - { data: {} } }
  * if unsuccessful, the return will be:
  * @returns {object} - { data: { error: string } }
  */
-
-export const getTrackers = async () => {
+export const createTrackerLog = async (trackerId: string, value: number) => {
   const sessionToken = await getSessionToken();
+  const body = {
+    value,
+  };
   const response = await apiClient
-    .get(BASE_PATH, {
+    .post(BASE_PATH + `/${trackerId}/logs`, body, {
       headers: {
         Authorization: `Bearer ${sessionToken}`,
       },
@@ -44,23 +47,22 @@ export const getTrackers = async () => {
 };
 
 /**
- * create a tracker
+ * Delete a tracker log
  * @header {Authorization} Bearer sessionToken - The session token of the user
- * @param {string} name - The name of the tracker
+ * @param {string} trackerLogId - The id of the tracker log
  * if successful, the return will be:
- * @returns {object} - { data: { tracker: { id: string, name: string, createdAt: string, updatedAt: string } }
+ * @return {object} - { data: {} } }
  * if unsuccessful, the return will be:
  * @returns {object} - { data: { error: string } }
  */
 
-export const createTracker = async (name: string) => {
+export const deleteTrackerLog = async (
+  trackerId: string,
+  trackerLogId: string
+) => {
   const sessionToken = await getSessionToken();
-  const body = {
-    name,
-    type: "time",
-  };
   const response = await apiClient
-    .post(BASE_PATH, body, {
+    .delete(`${BASE_PATH}/${trackerId}/logs/${trackerLogId}`, {
       headers: {
         Authorization: `Bearer ${sessionToken}`,
       },
@@ -75,10 +77,7 @@ export const createTracker = async (name: string) => {
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
         console.log("request error", error.request);
-        return { data: { error: "Network Error" } };
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log("axios error", error.config);
+        console.log("config", error.config);
         return { data: { error: "Network Error" } };
       }
     });

@@ -27,6 +27,7 @@ export default function Signin({ navigation }) {
     <View
       style={{
         height: "100%",
+        justifyContent: "center",
         alignItems: "center",
         backgroundColor: StyleConstants.primaryColor,
       }}
@@ -47,6 +48,7 @@ export default function Signin({ navigation }) {
         style={styles.inputBox}
         placeholder="Email"
       />
+      <View style={{ marginBottom: 12 }}></View>
       <TextInput
         value={password}
         onChangeText={onChangePassword}
@@ -54,7 +56,7 @@ export default function Signin({ navigation }) {
         placeholder="Password"
       />
 
-      <Text style={{ color: "red", marginBottom: 8 }}>{error}</Text>
+      <Text style={{ color: "red", padding: 16 }}>{error}</Text>
       <TouchableHighlight onPress={onSignin} style={styles.button}>
         <Text style={{ color: "white", fontWeight: "bold" }}>Sign in</Text>
       </TouchableHighlight>
@@ -66,7 +68,6 @@ const styles = StyleSheet.create({
   inputBox: {
     backgroundColor: "#fff",
     width: "60%",
-    marginBottom: 12,
     padding: 12,
     borderRadius: StyleConstants.borderRadius,
     borderColor: StyleConstants.callToActionColor,
