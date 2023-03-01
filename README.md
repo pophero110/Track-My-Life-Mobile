@@ -1,2 +1,2 @@
 # Track My Life
-A React Native application allow user to create all kinds of tracker such as time tracker, water intake tracker, fitness tracker, weight tracker and etc.. 
+A React Native application allow user to create timer for tracking activity and integrate with nfc to enable app to start tracking by tapping on a nfc tag which is created by user for a specific activity
