@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import { StyleConstants } from "../StyleConstants";
+import StyleConstants from "../StyleConstants";
 
 export default function Quote() {
   return (
@@ -30,6 +30,5 @@ const styles = StyleSheet.create({
   quote: {
     width: "80%",
     borderRadius: StyleConstants.borderRadius,
-    padding: 12,
   },
 });

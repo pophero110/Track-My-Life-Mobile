@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
 } from "react-native";
-import { StyleConstants } from "../StyleConstants";
+import StyleConstants from "../StyleConstants";
 export default function TrakcerForm({
   onCreateTracker,
   setTrackerName,

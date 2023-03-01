@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react";
 import { View, ScrollView } from "react-native";
-import { StyleConstants } from "../StyleConstants";
+import StyleConstants from "../StyleConstants";
 import TrackerList from "../components/TrackerList";
 import BottomMenu from "../components/BottomMenu";
 import { createTracker } from "../api/trackers";
+import { useTrackerContext } from "../context/trackContext";
 
-export default function HomeScreen({ navigation }) {
-  const [trackers, setTrackers] = useState([]);
+export default function HomeScreen({ navigation, route }) {
+  const { trackers, setTrackers } = useTrackerContext();
   const [trackerName, setTrackerName] = useState("");
+  //TODO: better way to update tracker list after delete
+  const { deletedTrackerId } = route.params || {};
+  useEffect(() => {
+    if (deletedTrackerId) {
+      setTrackers(trackers.filter((t) => t._id !== deletedTrackerId));
+    }
+  }, [deletedTrackerId]);
 
   const onCreateTracker = async () => {
     const result = await createTracker(trackerName);
@@ -17,7 +25,6 @@ export default function HomeScreen({ navigation }) {
     } else {
       navigation.navigate("Signin");
     }
-    console.log(result);
   };
 
   return (
@@ -47,7 +54,7 @@ const styles = {
     backgroundColor: StyleConstants.primaryColor,
   },
   sectionContainer: {
-    marginTop: 16,
+    marginTop: 8,
     paddingHorizontal: 16,
     paddingBottom: "35%",
   },

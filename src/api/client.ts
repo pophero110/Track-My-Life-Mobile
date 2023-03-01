@@ -26,3 +26,23 @@ export const getSessionToken = async () => {
     console.log("Error getting session token", error);
   }
 };
+
+export function handleRequestError(error) {
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    return { data: { error: error.response.data.error } };
+  } else if (error.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    console.log("request error", error.request);
+    console.log("config", error.config);
+    return { data: { error: "Network Error" } };
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.log("axios error", error.config);
+    console.log("Error", error.message);
+    return { data: { error: "Network Error" } };
+  }
+}

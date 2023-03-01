@@ -1,4 +1,4 @@
-export const StyleConstants = {
+const StyleConstants = {
   // Colors
   primaryColor: "#E0FBFC",
   secondaryColor: "#B1F5F8",
@@ -7,3 +7,5 @@ export const StyleConstants = {
   baseFontSize: 4,
   borderRadius: 4,
 };
+
+export default StyleConstants;

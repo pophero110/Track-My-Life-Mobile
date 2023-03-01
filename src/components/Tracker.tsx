@@ -1,10 +1,15 @@
 import { View, Text, TouchableHighlight, StyleSheet } from "react-native";
-import { StyleConstants } from "../StyleConstants";
+import StyleConstants from "../StyleConstants";
 export default function Tracker({ tracker, navigation }) {
   return (
     <TouchableHighlight
       underlayColor="white"
-      onPress={() => navigation.navigate("Tracker", { tracker })}
+      onPress={() =>
+        navigation.navigate("Tracker", {
+          trackerId: tracker._id,
+          trackerName: tracker.name,
+        })
+      }
     >
       <View style={styles.tracker}>
         <View style={styles.trackerLeft}>

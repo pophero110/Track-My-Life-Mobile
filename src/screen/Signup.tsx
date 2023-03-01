@@ -5,10 +5,10 @@ import {
   StyleSheet,
   TouchableHighlight,
 } from "react-native";
-import { StyleConstants } from "../StyleConstants";
+import StyleConstants from "../StyleConstants";
 import { useState } from "react";
 import { signup } from "../api/users";
-import { userValidator } from "../utils/userValidator";
+import { validateSignup } from "../utils/userValidator";
 
 export default function Signup({ navigation }) {
   const [name, onChangeName] = useState("");
@@ -18,7 +18,7 @@ export default function Signup({ navigation }) {
   const [errors, setErrors] = useState([]);
   const [response, setResponse] = useState("");
   const onSignup = async () => {
-    const validateErrors = userValidator({
+    const validateErrors = validateSignup({
       name,
       email,
       password,
@@ -31,12 +31,12 @@ export default function Signup({ navigation }) {
     ) {
       setErrors(Object.values(validateErrors));
     } else {
-      const response = await signup(email, password, name);
-      if (response.status === 201) {
+      const result = await signup(email, password, name);
+      if (result.data.error) {
+        setResponse("Signup failed");
+      } else {
         setResponse("Signup successful");
         navigation.navigate("Signin");
-      } else {
-        setResponse("Signup failed");
       }
     }
   };
@@ -101,8 +101,19 @@ export default function Signup({ navigation }) {
         <Text style={{ color: "white", fontWeight: "bold" }}>Create</Text>
       </TouchableHighlight>
 
-      <TouchableHighlight onPress={() => navigation.navigate("Signin")}>
-        <Text>Sign in</Text>
+      <TouchableHighlight
+        style={{
+          marginTop: 16,
+        }}
+        onPress={() => navigation.navigate("Signin")}
+      >
+        <Text
+          style={{
+            textDecorationLine: "underline",
+          }}
+        >
+          Sign in with an existing account
+        </Text>
       </TouchableHighlight>
     </View>
   );

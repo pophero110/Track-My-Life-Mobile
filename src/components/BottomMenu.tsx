@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
-import { StyleConstants } from "../StyleConstants";
+import StyleConstants from "../StyleConstants";
 import TrakcerForm from "../screen/TrackerForm";
 import { readNdef } from "../utils/nfcManager";
 export default function BottomMenu({

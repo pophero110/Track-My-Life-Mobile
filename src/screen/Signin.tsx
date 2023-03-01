@@ -5,21 +5,27 @@ import {
   TouchableHighlight,
   StyleSheet,
 } from "react-native";
-import { StyleConstants } from "../StyleConstants";
+import StyleConstants from "../StyleConstants";
 import { useState } from "react";
 import { signin } from "../api/sessions";
+import { validateSignin } from "../utils/userValidator";
 export default function Signin({ navigation }) {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
   const [error, setError] = useState("");
 
   const onSignin = async () => {
-    const result = await signin(email, password);
-    console.log(result);
-    if (result.data.error) {
-      setError(result.data.error);
+    const validateError = validateSignin({ email, password });
+    if (validateError.email || validateError.password) {
+      setError(validateError.email || validateError.password);
     } else {
-      navigation.navigate("Home");
+      const result = await signin(email, password);
+      console.log(result);
+      if (result.data.error) {
+        setError(result.data.error);
+      } else {
+        navigation.navigate("Home");
+      }
     }
   };
 
@@ -27,7 +33,6 @@ export default function Signin({ navigation }) {
     <View
       style={{
         height: "100%",
-        justifyContent: "center",
         alignItems: "center",
         backgroundColor: StyleConstants.primaryColor,
       }}
@@ -48,7 +53,6 @@ export default function Signin({ navigation }) {
         style={styles.inputBox}
         placeholder="Email"
       />
-      <View style={{ marginBottom: 12 }}></View>
       <TextInput
         value={password}
         onChangeText={onChangePassword}
@@ -56,7 +60,7 @@ export default function Signin({ navigation }) {
         placeholder="Password"
       />
 
-      <Text style={{ color: "red", padding: 16 }}>{error}</Text>
+      {error && <Text style={{ color: "red", marginBottom: 8 }}>{error}</Text>}
       <TouchableHighlight onPress={onSignin} style={styles.button}>
         <Text style={{ color: "white", fontWeight: "bold" }}>Sign in</Text>
       </TouchableHighlight>
@@ -69,6 +73,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     width: "60%",
     padding: 12,
+    marginBottom: 12,
     borderRadius: StyleConstants.borderRadius,
     borderColor: StyleConstants.callToActionColor,
   },

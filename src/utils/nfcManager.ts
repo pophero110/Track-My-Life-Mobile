@@ -1,6 +1,6 @@
 import NfcManager, { NfcTech, Ndef } from "react-native-nfc-manager";
 
-export async function readNdef() {
+export async function readNdef(): Promise<string> {
   let trackerId;
   try {
     // register for the NFC tag with NDEF in it
@@ -11,7 +11,7 @@ export async function readNdef() {
     const payload = Ndef.util.bytesToString(ndefMessage.payload);
     trackerId = payload?.slice(3);
   } catch (ex) {
-    console.warn("Oops!", ex);
+    console.log("Error readNdef", ex);
   } finally {
     // stop the nfc scanning
     NfcManager.cancelTechnologyRequest();
@@ -19,12 +19,12 @@ export async function readNdef() {
   return trackerId;
 }
 
-export async function writeNdef(tracker) {
+export async function writeNdef(trackId) {
   let result = false;
   try {
     // STEP 1
     await NfcManager.requestTechnology(NfcTech.Ndef);
-    const bytes = Ndef.encodeMessage([Ndef.textRecord(tracker._id.toString())]);
+    const bytes = Ndef.encodeMessage([Ndef.textRecord(trackId.toString())]);
     if (bytes) {
       console.warn(bytes);
       await NfcManager.ndefHandler // STEP 2
@@ -32,7 +32,7 @@ export async function writeNdef(tracker) {
       result = true;
     }
   } catch (ex) {
-    console.warn(ex);
+    console.log("Error writeNdef", ex);
   } finally {
     // STEP 4
     NfcManager.cancelTechnologyRequest();

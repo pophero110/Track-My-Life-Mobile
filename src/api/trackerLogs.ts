@@ -1,4 +1,4 @@
-import { apiClient } from "./client";
+import { apiClient, handleRequestError } from "./client";
 import { getSessionToken } from "./client";
 
 const BASE_PATH = "/api/v1/trackers";
@@ -12,7 +12,10 @@ const BASE_PATH = "/api/v1/trackers";
  * if unsuccessful, the return will be:
  * @returns {object} - { data: { error: string } }
  */
-export const createTrackerLog = async (trackerId: string, value: number) => {
+export const createTrackerLog = async (
+  trackerId: string,
+  value: number
+): Promise<{ data: { error: string } }> => {
   const sessionToken = await getSessionToken();
   const body = {
     value,
@@ -24,24 +27,7 @@ export const createTrackerLog = async (trackerId: string, value: number) => {
       },
     })
     .catch((error) => {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        return { data: { error: error.response.data.error } };
-        //TODO: refactor repeated code into a function
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.log("request error", error.request);
-        console.log("config", error.config);
-        return { data: { error: "Network Error" } };
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log("axios error", error.config);
-        console.log("Error", error.message);
-        return { data: { error: "Network Error" } };
-      }
+      return handleRequestError(error);
     });
   return { data: response.data };
 };
@@ -59,7 +45,7 @@ export const createTrackerLog = async (trackerId: string, value: number) => {
 export const deleteTrackerLog = async (
   trackerId: string,
   trackerLogId: string
-) => {
+): Promise<{ data: { error: string } }> => {
   const sessionToken = await getSessionToken();
   const response = await apiClient
     .delete(`${BASE_PATH}/${trackerId}/logs/${trackerLogId}`, {
@@ -68,18 +54,7 @@ export const deleteTrackerLog = async (
       },
     })
     .catch((error) => {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        return { data: { error: error.response.data.error } };
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.log("request error", error.request);
-        console.log("config", error.config);
-        return { data: { error: "Network Error" } };
-      }
+      return handleRequestError(error);
     });
   return { data: response.data };
 };
