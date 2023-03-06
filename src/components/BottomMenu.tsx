@@ -12,10 +12,16 @@ export default function BottomMenu({
   const onReadNdef = async () => {
     const trackerId = await readNdef();
     console.log("trackerId: ", trackerId);
+    console.log("trackers: ", trackers);
     if (trackerId) {
       const tracker = trackers.find((tracker) => tracker._id === trackerId);
+      // TODO: make a interface for tracker - home screen is using the same
       if (tracker) {
-        navigation.navigate("Tracker", { tracker, viaScan: true });
+        navigation.navigate("TrackerDetail", {
+          trackerId: tracker._id,
+          trackerName: tracker.name,
+          viaScan: true,
+        });
       }
     }
   };

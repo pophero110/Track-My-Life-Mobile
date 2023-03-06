@@ -5,7 +5,7 @@ export default function Tracker({ tracker, navigation }) {
     <TouchableHighlight
       underlayColor="white"
       onPress={() =>
-        navigation.navigate("Tracker", {
+        navigation.navigate("TrackerDetail", {
           trackerId: tracker._id,
           trackerName: tracker.name,
         })

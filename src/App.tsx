@@ -4,7 +4,7 @@ import HomeScreen from "./screen/Home";
 import Signup from "./screen/Signup";
 import StyleConstants from "./StyleConstants";
 import Signin from "./screen/Signin";
-import Tracker from "./screen/TrackDetail";
+import Tracker from "./screen/TrackerDetail";
 import { TouchableHighlight, Text, Button } from "react-native";
 import { deleteTracker } from "./api/trackers";
 import { TrackerContextProvider } from "./context/trackContext";
@@ -63,7 +63,7 @@ export default function App() {
             component={Signin}
           ></Stack.Screen>
           <Stack.Screen
-            name="Tracker"
+            name="TrackerDetail"
             component={Tracker}
             options={({ route, navigation }) => ({
               title: route.params.trackerName,
