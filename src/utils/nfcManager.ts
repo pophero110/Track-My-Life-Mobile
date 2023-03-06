@@ -26,7 +26,6 @@ export async function writeNdef(trackId) {
     await NfcManager.requestTechnology(NfcTech.Ndef);
     const bytes = Ndef.encodeMessage([Ndef.textRecord(trackId.toString())]);
     if (bytes) {
-      console.warn(bytes);
       await NfcManager.ndefHandler // STEP 2
         .writeNdefMessage(bytes); // STEP 3
       result = true;
